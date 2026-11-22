@@ -10,7 +10,7 @@ fun watchConnectivity(context: Context) {
     // activeNetwork / networkHandle (API 23) and registerDefaultNetworkCallback (API 24) do not exist
     // on Android 5 and 6. There Connectivity keeps its optimistic default and is never fed.
     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N) return
-    val manager = androidx.core.content.ContextCompat.getSystemService(context, ConnectivityManager::class.java) ?: return
+    val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
     fun validated(capabilities: NetworkCapabilities?) =
         capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
     // Seeded now, so nothing reads the optimistic default once the app is running.
