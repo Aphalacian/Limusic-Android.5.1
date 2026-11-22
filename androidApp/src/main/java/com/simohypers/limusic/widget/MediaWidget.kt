@@ -219,13 +219,13 @@ private suspend fun tickProgress(
     context: Context,
     handler: MediaPlayerHandler,
 ) {
-    val power = context.getSystemService(PowerManager::class.java)
+    val power = androidx.core.content.ContextCompat.getSystemService(context, PowerManager::class.java)
     val widgets = GlanceAppWidgetManager(context)
     combine(handler.controlState.map { it.isPlaying }, handler.nowPlayingState.map { it.mediaItem.mediaId }) { playing, id -> playing to id }
         .distinctUntilChanged()
         .collectLatest { (playing, _) ->
             do {
-                if (power.isInteractive && widgets.getGlanceIds(MediaWidget::class.java).isNotEmpty()) {
+                if (power?.isInteractive != false && widgets.getGlanceIds(MediaWidget::class.java).isNotEmpty()) {
                     val at =
                         withContext(Dispatchers.Main) {
                             if (!handler.nowPlayingState.value.isNotEmpty()) return@withContext null

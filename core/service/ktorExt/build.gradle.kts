@@ -16,7 +16,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.ktorext"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
     }
 
     // Source set declarations.

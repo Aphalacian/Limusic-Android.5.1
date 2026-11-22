@@ -64,7 +64,7 @@ class UpdateCheckWorker(
                     ComposeResUtils.getResString(StringType.UPDATE_NOTIFICATION_CHANNEL),
                     NotificationManager.IMPORTANCE_DEFAULT,
                 )
-            applicationContext.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
+            androidx.core.content.ContextCompat.getSystemService(applicationContext, NotificationManager::class.java)?.createNotificationChannel(channel)
         }
         val open =
             PendingIntent.getActivity(

@@ -47,8 +47,13 @@ actual suspend fun calculateDataFraction(cacheRepository: CacheRepository): Sett
         val playerCache = cacheRepository.getCacheSize(Config.PLAYER_CACHE)
         val downloadCache = cacheRepository.getCacheSize(Config.DOWNLOAD_CACHE)
         val canvasCache = cacheRepository.getCacheSize(Config.CANVAS_CACHE)
+        // StorageStatsManager is API 26+; on older Android the storage chart is simply hidden.
         val mStorageStatsManager =
-            application.getSystemService(StorageStatsManager::class.java)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                androidx.core.content.ContextCompat.getSystemService(application, StorageStatsManager::class.java)
+            } else {
+                null
+            }
         if (mStorageStatsManager != null) {
             val totalByte =
                 mStorageStatsManager.getTotalBytes(StorageManager.UUID_DEFAULT).bytesToMB()

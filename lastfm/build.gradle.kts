@@ -11,7 +11,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.lastfm"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
         withHostTest {}
     }
 

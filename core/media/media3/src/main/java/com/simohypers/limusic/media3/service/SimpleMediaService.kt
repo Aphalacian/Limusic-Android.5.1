@@ -108,7 +108,7 @@ internal class SimpleMediaService :
         )
         // ponytail: installs from before 2026-10-30 still have the playback channel under its old id;
         // dropping it leaves one channel in Android's notification settings. Remove once testers have updated.
-        getSystemService(NotificationManager::class.java)?.deleteNotificationChannel("SimpMusic Playback Notification ID")
+        androidx.core.content.ContextCompat.getSystemService(this, NotificationManager::class.java)?.deleteNotificationChannel("SimpMusic Playback Notification ID")
 
         if (mediaSession == null) {
             mediaSession =

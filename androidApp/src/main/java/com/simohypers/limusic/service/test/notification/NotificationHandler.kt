@@ -106,6 +106,7 @@ object NotificationHandler {
      * Required on Android O+
      */
     fun createNotificationChannel(context: Context) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) return
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
@@ -130,6 +131,7 @@ object NotificationHandler {
      * notifications.
      */
     fun createBlogNotificationChannel(context: Context) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) return
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (notificationManager.getNotificationChannel(BLOG_CHANNEL_ID) == null) {

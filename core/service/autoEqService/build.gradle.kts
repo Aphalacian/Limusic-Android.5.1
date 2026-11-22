@@ -10,7 +10,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.autoeq"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
     }
 
     sourceSets {

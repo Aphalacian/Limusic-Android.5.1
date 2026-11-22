@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         applicationId = "com.limusic.android"
-        minSdk = 26
+        minSdk = 21
         targetSdk = 36
         versionName =
             libs.versions.version.name

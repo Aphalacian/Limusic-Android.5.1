@@ -14,7 +14,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.lyrics"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
         withHostTest {}
     }
 

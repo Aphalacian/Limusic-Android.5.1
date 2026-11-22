@@ -20,7 +20,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.kotlinytmusicscraper"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
         withHostTest {}
     }
 

@@ -29,7 +29,11 @@ internal class AudioOutputRouter(
     private val context: Context,
     private val onPreferredChanged: (AudioDeviceInfo?) -> Unit,
 ) {
-    private val audioManager = context.getSystemService(AudioManager::class.java)
+    // AudioDeviceInfo / AudioDeviceCallback are API 23+. Below that the router stays inert: the
+    // output list is empty and nothing is registered, so the system picks the output as usual.
+    private val supported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    private val audioManager =
+        if (supported) context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager else null
     private val _outputs = MutableStateFlow<List<AudioOutput>>(emptyList())
     val outputs: StateFlow<List<AudioOutput>> = _outputs.asStateFlow()
 
@@ -38,16 +42,20 @@ internal class AudioOutputRouter(
     var preferredDevice: AudioDeviceInfo? = null
         private set
 
-    private val deviceCallback =
+    // Lazy so the AudioDeviceCallback subclass is never loaded on Android 5.
+    private val deviceCallback by lazy {
         object : AudioDeviceCallback() {
             override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) = refresh()
 
             override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) = refresh()
         }
+    }
 
     init {
         // The callback fires once straight away with every current device, which fills the list.
-        audioManager?.registerAudioDeviceCallback(deviceCallback, Handler(Looper.getMainLooper()))
+        if (supported) {
+            audioManager?.registerAudioDeviceCallback(deviceCallback, Handler(Looper.getMainLooper()))
+        }
     }
 
     /** Route to the output with [id], or back to the system when null or no longer present. */
@@ -62,7 +70,7 @@ internal class AudioOutputRouter(
     }
 
     fun release() {
-        audioManager?.unregisterAudioDeviceCallback(deviceCallback)
+        if (supported) audioManager?.unregisterAudioDeviceCallback(deviceCallback)
     }
 
     fun refresh() {
@@ -90,6 +98,7 @@ internal class AudioOutputRouter(
     // Outputs music can be sent to, one entry per physical device: a Bluetooth headset is listed
     // once for media (A2DP) and once for calls (SCO), and LE Audio as both a headset and a speaker.
     private fun usableDevices(): List<AudioDeviceInfo> {
+        if (!supported) return emptyList()
         val all = audioManager?.getDevices(AudioManager.GET_DEVICES_OUTPUTS).orEmpty()
         return all
             .filter { kindOf(it.type) != null }

@@ -86,7 +86,12 @@ internal class MergingMediaSourceFactory(
             !isOnline()
 
     private fun isOnline(): Boolean {
-        val connectivityManager = context.getSystemService(ConnectivityManager::class.java) ?: return true
+        val connectivityManager = androidx.core.content.ContextCompat.getSystemService(context, ConnectivityManager::class.java) ?: return true
+        // activeNetwork is API 23+; Android 5 and below fall back to the older NetworkInfo.
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            @Suppress("DEPRECATION")
+            return connectivityManager.activeNetworkInfo?.isConnected == true
+        }
         return connectivityManager
             .getNetworkCapabilities(connectivityManager.activeNetwork)
             ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true

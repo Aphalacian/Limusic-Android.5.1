@@ -34,7 +34,7 @@ kotlin {
     android {
         namespace = "com.simohypers.limusic.composeapp"
         compileSdk = 37
-        minSdk = 26
+        minSdk = 21
         withJava()
         withHostTest {}
         androidResources {
