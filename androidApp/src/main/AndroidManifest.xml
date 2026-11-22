@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+        <!-- Experimental Android 5 build: haze (UI blur) declares minSdk 23. Forced on anyway. -->
+    <uses-sdk tools:overrideLibrary="dev.chrisbanes.haze.materials, dev.chrisbanes.haze.blur, dev.chrisbanes.haze" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
